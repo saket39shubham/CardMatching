@@ -44,4 +44,22 @@ Audio feedback: flip, match, mismatch, game over
 
 Continuous card flipping without waiting for card comparison
 
+#Gameplay Instructions
+
+Select a board layout from the dropdown.
+
+Click a card to flip it, then select a second card.
+
+If the two cards match:
+
+They animate (pop + reduced opacity)
+
+Score increases
+
+If not matched:
+
+Cards flip back after 1 second
+
+Continue until all pairs are matched → Game Over panel shows final score
+
 Fully resettable board for layout changes
