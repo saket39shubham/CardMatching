@@ -4,26 +4,35 @@ using UnityEngine.UI;
 public class CardController : MonoBehaviour
 {
     public int cardID;
+
     public bool isFlipped = false;
     public bool isMatched = false;
 
     public GameObject front;
     public GameObject back;
 
-    public Image frontImage;   // used to change color when matched
+    public Image frontImage;
 
-    void Start()
+    private Button button;
+
+    void Awake()
     {
+        button = GetComponent<Button>();
+        button.onClick.AddListener(OnCardClicked);
+    }
+
+    public void SetCard(int id)
+    {
+        cardID = id;
         ShowBack();
     }
 
-    public void OnCardClicked()
+    void OnCardClicked()
     {
         if (isFlipped || isMatched) return;
 
         FlipCard();
 
-        // Inform GameManager that a card was clicked
         GameManager.Instance.CardSelected(this);
     }
 
@@ -35,7 +44,7 @@ public class CardController : MonoBehaviour
         back.SetActive(false);
     }
 
-    public void ShowBack()
+    public void FlipBack()
     {
         isFlipped = false;
 
@@ -47,27 +56,24 @@ public class CardController : MonoBehaviour
     {
         isMatched = true;
 
-        // Change color to green when matched
-        if (frontImage != null)
-        {
-            frontImage.color = Color.green;
-        }
+        frontImage.color = Color.green;
     }
 
     public void SetMismatch()
     {
-        // change color to red briefly
-        if (frontImage != null)
-        {
-            frontImage.color = Color.red;
-        }
-
-        Invoke(nameof(ResetCard), 0.8f);
+        frontImage.color = Color.red;
     }
 
-    void ResetCard()
+    public void ResetColor()
     {
         frontImage.color = Color.white;
-        ShowBack();
+    }
+
+    public void ShowBack()
+    {
+        isFlipped = false;
+
+        front.SetActive(false);
+        back.SetActive(true);
     }
 }
