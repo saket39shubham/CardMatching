@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
-
+using TMPro;
+using System.Collections;
 public class CardController : MonoBehaviour
 {
     public int cardID;
@@ -11,19 +12,23 @@ public class CardController : MonoBehaviour
     public GameObject front;
     public GameObject back;
 
-    public Image frontImage;
-
+    [SerializeField] private TMP_Text numberText;
+    [SerializeField] private CanvasGroup canvasGroup;
     private Button button;
 
     void Awake()
     {
         button = GetComponent<Button>();
         button.onClick.AddListener(OnCardClicked);
+        if (canvasGroup == null)
+            canvasGroup = GetComponent<CanvasGroup>();
     }
 
     public void SetCard(int id)
     {
         cardID = id;
+        if (numberText != null)
+            numberText.text = (id + 1).ToString();
         ShowBack();
     }
 
@@ -39,7 +44,7 @@ public class CardController : MonoBehaviour
     public void FlipCard()
     {
         isFlipped = true;
-
+        AudioManager.Instance.PlayFlip();
         front.SetActive(true);
         back.SetActive(false);
     }
@@ -56,24 +61,62 @@ public class CardController : MonoBehaviour
     {
         isMatched = true;
 
-        frontImage.color = Color.green;
-    }
+        // Disable button instead of hiding
+        if (button != null)
+            button.interactable = false;
 
-    public void SetMismatch()
+        front.SetActive(true);
+        back.SetActive(false);
+        StopAllCoroutines();
+        StartCoroutine(MatchAnimation());
+    }
+    private IEnumerator MatchAnimation()
     {
-        frontImage.color = Color.red;
-    }
+        float duration = 0.5f; // half a second animation
+        float elapsed = 0f;
 
-    public void ResetColor()
-    {
-        frontImage.color = Color.white;
-    }
+        Vector3 startScale = transform.localScale;
+        Vector3 targetScale = startScale * 1.2f; // small pop
 
+        float startAlpha = canvasGroup.alpha;
+        float targetAlpha = 0.5f; // reduce opacity to 50%
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / duration;
+
+            transform.localScale = Vector3.Lerp(startScale, targetScale, t);
+            canvasGroup.alpha = Mathf.Lerp(startAlpha, targetAlpha, t);
+
+            yield return null;
+        }
+
+        // Reset scale to normal after pop
+        transform.localScale = startScale;
+        canvasGroup.alpha = targetAlpha;
+    }
     public void ShowBack()
     {
         isFlipped = false;
 
         front.SetActive(false);
         back.SetActive(true);
+    }
+    public void ResetCard()
+    {
+        isFlipped = false;
+        isMatched = false;
+
+        if (button != null)
+            button.interactable = true;
+
+        front.SetActive(false);
+        back.SetActive(true);
+
+        if (canvasGroup != null)
+            canvasGroup.alpha = 1f;
+
+        transform.localScale = Vector3.one;
     }
 }

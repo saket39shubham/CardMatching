@@ -59,6 +59,7 @@ public class BoardManager : MonoBehaviour
     public void BuildNew(int r, int c, int seed)
     {
         rows = r; cols = c;
+        ResetAllCards();
         Clear();
         ApplyGridSpacing();
         RecalcCellSize();
@@ -133,4 +134,22 @@ public class BoardManager : MonoBehaviour
             (list[i], list[j]) = (list[j], list[i]);
         }
     }
+    public void SetBoardInteractable(bool state)
+    {
+        foreach (var card in _cards)
+        {
+            var btn = card.GetComponent<Button>();
+            if (btn != null)
+                btn.interactable = state;
+        }
+    }
+    public void ResetAllCards()
+    {
+        foreach (var card in _cards)
+        {
+            if (card != null)
+                card.ResetCard();
+        }
+    }
+
 }
