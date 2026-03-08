@@ -2265,6 +2265,7 @@ GameObject:
   - component: {fileID: 1310544351}
   - component: {fileID: 1310544350}
   - component: {fileID: 1310544349}
+  - component: {fileID: 1310544353}
   m_Layer: 5
   m_Name: GameBoard
   m_TagString: Untagged
@@ -2367,6 +2368,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1310544347}
   m_CullTransparentMesh: 1
+--- !u!114 &1310544353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1310544347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cfae5c5d22f6f84c93fbc51dddefed6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BoardManager
+  rows: 4
+  cols: 4
+  padding: {x: 16, y: 16}
+  spacing: {x: 8, y: 8}
+  boardRoot: {fileID: 1310544348}
+  cardPrefab: {fileID: 5893946816585186822, guid: a91b923b7a5ea98408236e28f17dc288, type: 3}
 --- !u!1 &1372749898
 GameObject:
   m_ObjectHideFlags: 0
@@ -2964,6 +2983,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b217ca77eebc5040a127a7d65fbff50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  boardManager: {fileID: 1310544353}
+  layoutDropdown: {fileID: 397928370}
 --- !u!4 &1794110742
 Transform:
   m_ObjectHideFlags: 0
